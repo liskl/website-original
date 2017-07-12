@@ -1,0 +1,23 @@
+version: "3.3"
+services:
+  backend:
+    build:
+      context: backend/.
+    expose:
+     - "9000"
+
+  frontend:
+    build:
+      context: frontend/.
+    labels:
+      traefik.frontend.rule: "Host:liskl.com"
+    privileged: true
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+    links:
+      - backend
+
+#docker run --privileged=true -p 80:80 -p 443:443 --name nginx -v /home/user/nginx/conf:/etc/nginx/conf.d -v /home/user/nginx/log:/var/log/nginx:rw --volumes-from phpfpm --link phpfpm:fpm -d matriphe/alpine-nginx
